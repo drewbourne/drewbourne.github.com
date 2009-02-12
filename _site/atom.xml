@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Drew Bourne</title>
+ <link href="http://drewbourne.github.com/atom.xml" rel="self"/>
+ <link href="http://drewbourne.github.com/"/>
+ <updated>2009-02-13T02:02:06+11:00</updated>
+ <id>http://drewbourne.github.com/</id>
+ <author>
+   <name>Drew Bourne</name>
+   <email>andrew@firstbourne.com</email>
+   <email>firstbourne@gmail.com</email>
+ </author>
+
+ 
+ <entry>
+   <title>Plucking Chickens</title>
+   <link href="http://drewbourne.github.com//2009/02/13/plucking-chickens.html"/>
+   <updated>2009-02-13T00:00:00+11:00</updated>
+   <id>http://drewbourne.github.com//2009/02/13/plucking-chickens</id>
+   <content type="html">&lt;p&gt;I have some chickens, and I want to know how many feathers they have each.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+var chickens:Array = [new Chicken({ feathers: Math.round(Math.random() * 5000) }), 
+                      new Chicken({ feathers: Math.round(Math.random() * 5000) }),
+                      new Chicken({ feathers: Math.round(Math.random() * 5000) })];
+var feathersPerChicken:Array = null;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I would rather not sit there and iterate through my chickens, picking up each one, counting its feathers and then letting it run off, remembering where I got up to, and then possible forgetting which chicken I was up to.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+for (var i:int = 0, n:int = chickens.length; i &amp;lt; n; i++) {
+  var chicken:Chicken = chickens[i];
+  var feathers:Number = chicken.feathers;
+  feathersPerChicken.push(feathers);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Eww, I almost stepped on a temporary variable one of the chickens left behind.&lt;/p&gt;
+&lt;p&gt;Good thing we know how to clean that up with a &lt;code&gt;map&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+var feathersPerChicken:Array = chicken.map(function(chicken:Chicken, i:int, a:Array):void {
+  return chicken.feathers;
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I just remembered I need to know the weights of all the chickens too. We should probably get out our &lt;code&gt;map&lt;/code&gt; again.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+var weightsPerChicken:Array = chicken.map(function(chicken:Chicken, i:int, a:Array):void {
+  return chicken.weight;
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It is looking pretty similar to last time. Could we do something to remove the repetition and show only what changes? Lets give this a few go&amp;#8217;s.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+function getChickenProperty(property:String):Function {
+  return function(chicken:Chicken, i:int, a:Array):Object {
+    return chickenProperty[property];
+  }
+}
+var feathersPerChicken:Array = chickens.map(getChickenProperty("feathers"));
+var weightsPerChicken:Array = chickens.map(getChickenProperty("weight"));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Reasonable attempt, but we might not always be dealing with chickens, feathers and weights. Lets go again.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+function getProperty(property:String):Function {
+  return function(item:Object, i:int, a:Array):Object {
+    return item[property];
+  }
+}
+var feathersPerChicken:Array = chickens.map(getProperty("feathers"));
+var weightsPerChicken:Array = chickens.map(getProperty("weight"));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Thats more like it. However why do we have to get out the &lt;code&gt;map&lt;/code&gt; and &lt;code&gt;getProperty&lt;/code&gt; when what we want is to &lt;em&gt;pluck some feathers&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;If we shuffle the code around a little we can forget about &lt;code&gt;map&lt;/code&gt;, &lt;code&gt;getProperty&lt;/code&gt;, temporary variables, and iterator functions and say what we really mean.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+function pluck(array:Array, property:String):Array {
+  return array.map(function(item:Object, i:int, a:Array):Object {
+    return item[property];
+  });
+}
+  
+var feathersPerChicken:Array = pluck(chickens, "feathers");
+var weightsPerChicken:Array = pluck(chickens, "weight");
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What if the &lt;code&gt;Chicken.feathers&lt;/code&gt; property was an &lt;code&gt;Array&lt;/code&gt; instead of a &lt;code&gt;Number&lt;/code&gt;, how could we change &lt;code&gt;pluck()&lt;/code&gt; to support the following?&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+var feathersPerChicken:Array = pluck(chickens, "feathers.length");
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;pluck()&lt;/code&gt; is available in &lt;a href="http://github.com/drewbourne/asx/tree/master"&gt;asx&lt;/a&gt; and supports chained look-ups &lt;code&gt;"propertyA.propertyB.length"&lt;/code&gt; and simple methods &lt;code&gt;"property.toLowerCase()"&lt;/code&gt;.&lt;/p&gt;</content>
+ </entry>
+ 
+ <entry>
+   <title>O HAI</title>
+   <link href="http://drewbourne.github.com//2009/02/12/o-hai.html"/>
+   <updated>2009-02-12T00:00:00+11:00</updated>
+   <id>http://drewbourne.github.com//2009/02/12/o-hai</id>
+   <content type="html">&lt;p&gt;&lt;img src="/images/LOL-o-hai-i-upgraded-ur-language.jpg" alt="" /&gt;&lt;/p&gt;
+&lt;p&gt;This is an obligingly brief first post.&lt;/p&gt;
+&lt;p&gt;It is about time I started talking about my projects, most of them ActionScript3 and Flex related. I&amp;#8217;ll be showing lots of code about all sorts of fun stuff like mocks, testing, &lt;span class="caps"&gt;TDD&lt;/span&gt;, &lt;span class="caps"&gt;BDD&lt;/span&gt;, assertions, dependency injection, data structures, bytecode.&lt;/p&gt;</content>
+ </entry>
+ 
+ 
+</feed>

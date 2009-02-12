@@ -1,0 +1,100 @@
+/*
+body
+  header
+    a
+  article
+    header
+      h1
+    p, ul, ol, code, pre, aside, blockquote
+  footer
+    section#posts
+    section#projects
+    section#contact
+*/
+
+/*
+0b0c0d
+212226
+343840
+3d3d40
+545559
+*/
+
+/* html5 */
+article, footer, header, nav, section {
+  display: block;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  background-color: #212226;
+  color: #F0F2F6;
+  line-height: 120%;
+}
+
+body > section {
+  background-color: #0b0c0d;
+  color: #F0F2F6;
+  padding-top: 1em;
+}
+
+footer {
+  padding-top: 1em;
+}
+
+a:link,
+a:visited,
+a:active {
+  color: #545559;
+  text-decoration: none;
+}
+
+p, pre, blockquote {
+  margin-bottom: 1em;
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 295.5%;
+  line-height: 1.0em;
+}
+
+pre {
+  padding: 1em;
+  border: 1px solid #333;
+  background-color: #000;
+  margin-bottom: 3em;
+}
+
+header,
+article,
+section section,
+footer section {
+  width: 700px;
+  margin: 0 auto;
+}
+
+article, 
+article header,
+section section, 
+footer section {
+  padding-bottom: 1em;
+}
+
+body > section > header {
+  padding: 1em 0 1em 0;
+}
+
+article {
+  border-top: 1px solid #333;
+  padding-top: 1em;
+}
+
+footer {
+  padding-bottom: 1em;
+}
+
+#related-posts {
+  border-top: 1px solid #333;
+  padding-top: 1em;
+}

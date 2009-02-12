@@ -1,0 +1,10 @@
+---
+layout: post
+title: O HAI
+---
+
+!/images/LOL-o-hai-i-upgraded-ur-language.jpg!
+
+This is an obligingly brief first post.
+
+It is about time I started talking about my projects, most of them ActionScript3 and Flex related. I'll be showing lots of code about all sorts of fun stuff like mocks, testing, TDD, BDD, assertions, dependency injection, data structures, bytecode. 

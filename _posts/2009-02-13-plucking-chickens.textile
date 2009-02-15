@@ -24,7 +24,7 @@ for (var i:int = 0, n:int = chickens.length; i < n; i++) {
 
 Eww, I almost stepped on a temporary variable one of the chickens left behind. 
 
-Good thing we know how to clean that up with a @map@.
+Good thing we know how to clean that up with @Array.map@.
 
 <pre><code>
 var feathersPerChicken:Array = chicken.map(function(chicken:Chicken, i:int, a:Array):void {
@@ -64,9 +64,9 @@ var feathersPerChicken:Array = chickens.map(getProperty("feathers"));
 var weightsPerChicken:Array = chickens.map(getProperty("weight"));
 </code></pre>
 
-Thats more like it. However why do we have to get out the @map@ and @getProperty@ when what we want is to _pluck some feathers_. 
+Thats more like it. However why do we have to get out the @Array.map@ and @getProperty@ when what we want is to _pluck some feathers_. 
 
-If we shuffle the code around a little we can forget about @map@, @getProperty@, temporary variables, and iterator functions and say what we really mean.
+If we shuffle the code around a little we can forget about @Array.map@, @getProperty@, temporary variables, and iterator functions and say what we really mean.
 
 <pre><code>
 function pluck(array:Array, property:String):Array {
@@ -84,6 +84,8 @@ What if the @Chicken.feathers@ property was an @Array@ instead of a @Number@, ho
 <pre><code>
 var feathersPerChicken:Array = pluck(chickens, "feathers.length");
 </code></pre>
+
+---
 
 @pluck()@ is available in "asx":asx and supports chained look-ups @"propertyA.propertyB.length"@ and simple methods @"property.toLowerCase()"@. 
 

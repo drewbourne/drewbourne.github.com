@@ -5,44 +5,44 @@ title: Plucking Chickens
 
 I have some chickens, and I want to know how many feathers they have each. 
 
-<pre><code>
+{% highlight as3 %}
 var chickens:Array = [new Chicken({ feathers: Math.round(Math.random() * 5000) }), 
                       new Chicken({ feathers: Math.round(Math.random() * 5000) }),
                       new Chicken({ feathers: Math.round(Math.random() * 5000) })];
 var feathersPerChicken:Array = null;
-</code></pre>
+{% endhighlight %}
 
 I would rather not sit there and iterate through my chickens, picking up each one, counting its feathers and then letting it run off, remembering where I got up to, and then possible forgetting which chicken I was up to. 
 
-<pre><code>
+{% highlight as3 %}
 for (var i:int = 0, n:int = chickens.length; i < n; i++) {
   var chicken:Chicken = chickens[i];
   var feathers:Number = chicken.feathers;
   feathersPerChicken.push(feathers);
 }
-</code></pre>
+{% endhighlight %}
 
 Eww, I almost stepped on a temporary variable one of the chickens left behind. 
 
 Good thing we know how to clean that up with @Array.map@.
 
-<pre><code>
+{% highlight as3 %}
 var feathersPerChicken:Array = chicken.map(function(chicken:Chicken, i:int, a:Array):void {
   return chicken.feathers;
 });
-</code></pre>
+{% endhighlight %}
 
 I just remembered I need to know the weights of all the chickens too. We should probably get out our @map@ again.
 
-<pre><code>
+{% highlight as3 %}
 var weightsPerChicken:Array = chicken.map(function(chicken:Chicken, i:int, a:Array):void {
   return chicken.weight;
 });
-</code></pre>
+{% endhighlight %}
 
 It is looking pretty similar to last time. Could we do something to remove the repetition and show only what changes? Lets give this a few go's.
 
-<pre><code>
+{% highlight as3 %}
 function getChickenProperty(property:String):Function {
   return function(chicken:Chicken, i:int, a:Array):Object {
     return chickenProperty[property];
@@ -50,11 +50,11 @@ function getChickenProperty(property:String):Function {
 }
 var feathersPerChicken:Array = chickens.map(getChickenProperty("feathers"));
 var weightsPerChicken:Array = chickens.map(getChickenProperty("weight"));
-</code></pre>
+{% endhighlight %}
 
 Reasonable attempt, but we might not always be dealing with chickens, feathers and weights. Lets go again. 
 
-<pre><code>
+{% highlight as3 %}
 function getProperty(property:String):Function {
   return function(item:Object, i:int, a:Array):Object {
     return item[property];
@@ -62,13 +62,13 @@ function getProperty(property:String):Function {
 }
 var feathersPerChicken:Array = chickens.map(getProperty("feathers"));
 var weightsPerChicken:Array = chickens.map(getProperty("weight"));
-</code></pre>
+{% endhighlight %}
 
 Thats more like it. However why do we have to get out the @Array.map@ and @getProperty@ when what we want is to _pluck some feathers_. 
 
 If we shuffle the code around a little we can forget about @Array.map@, @getProperty@, temporary variables, and iterator functions and say what we really mean.
 
-<pre><code>
+{% highlight as3 %}
 function pluck(array:Array, property:String):Array {
   return array.map(function(item:Object, i:int, a:Array):Object {
     return item[property];
@@ -77,13 +77,13 @@ function pluck(array:Array, property:String):Array {
   
 var feathersPerChicken:Array = pluck(chickens, "feathers");
 var weightsPerChicken:Array = pluck(chickens, "weight");
-</code></pre>
+{% endhighlight %}
 
 What if the @Chicken.feathers@ property was an @Array@ instead of a @Number@, how could we change @pluck()@ to support the following? 
 
-<pre><code>
+{% highlight as3 %}
 var feathersPerChicken:Array = pluck(chickens, "feathers.length");
-</code></pre>
+{% endhighlight %}
 
 ---
 

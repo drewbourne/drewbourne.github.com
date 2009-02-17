@@ -1,0 +1,74 @@
+---
+layout: post
+title: conditional complexity
+---
+
+In starting a new project recently it occurred to me today to enable some of "Checkstyle":http://checkstyle.sourceforge.net/ configuration options that had previously been too noisy on legacy projects. This will hopefully help me and the other developers keep the Java code of this project clean, and free of common bad practices.
+
+One of the checks enabled was "cyclomatic complexity":http://en.wikipedia.org/wiki/Cyclomatic_complexity. 
+
+bq. The complexity is measured by the number of @if@, @while@, @do@, @for@, @?:@, @catch@, @switch@, @case@ statements, and operators @&&@ and @||@ (plus one) in the body of a constructor, method, static initializer, or instance initializer. It is a measure of the minimum number of possible paths through the source and therefore the number of required tests. Generally 1-4 is considered good, 5-7 ok, 8-10 consider re-factoring, and 11+ re-factor now! <br/>
+Taken from "Checkstyle metrics":http://checkstyle.sourceforge.net/config_metrics.html#CyclomaticComplexity
+
+I was feeling game so I set the limit to @5@.
+
+And very quickly I coded something that looked bad, felt hacky, repetitious, and lo -- it was. Checkstyle had flagged it with a cyclomatic complexity issue. Here is what the code looked like (although I have transcoded the Java to AS3 as the solution is applicable to both, and removed some information not necessary for the examples). 
+
+{% highlight as3 %}
+public function validateObject(object:Object):void {
+  if (conditionA || conditionB) {
+    throw new ObjectValidationError(object);
+  }
+  if (conditionC || conditionD) {
+    throw new ObjectValidationError(object);
+  }
+  if (conditionE || conditionF) {
+    throw new ObjectValidationError(object);
+  }
+  // and many more if-statements
+}
+{% endhighlight %}
+
+In my haste to spike out this piece of functionality I had violated "Don't Repeat Yourself". Even before I noticed the Checkstyle warning I had started refactoring this code. Attempt two was getting a little better. 
+
+{% highlight as3 %}
+public function validateObject(object:Object):void {
+  if (conditionA || conditionB) {
+    invalid(object);
+  }
+  if (conditionC || conditionD) {
+    invalid(object);
+  }
+  if (conditionE || conditionF) {
+    invalid(object);
+  }
+}
+
+protected function invalid(object:Object):void {
+  throw new ObjectValidationError(object);
+}
+{% endhighlight %}
+
+The repeated @if@ with the multiple conditions were still triggering the cyclomatic complexity warning and there was still too much repetition.
+
+{% highlight as3 %}
+public function validateObject(object:Object):void {
+  validate(conditionA && conditionB, object)
+  validate(conditionC && conditionD, object)
+  validate(conditionE && conditionF, object)
+}
+
+protected function validate(isValid:Boolean, object:Object):void {
+  if (!isValid) {
+    throw new ObjectValidationError(object);
+  }
+}
+{% endhighlight %}
+
+The improvements in readability, maintainability and DRY-ness should be evident in the version above. 
+
+* The validity conditional in @validate()@ is about as clear as possible,
+* Error instantiation and throwing appears only once,
+* @validateObject@ is almost declarative -- which is a good thing for validation, and a hint to future improvements.
+
+It has taken much longer to write up this post then it took to see the problem, test, and iterate on the solution. I was surprised at how quickly turning on the additional Checkstyle checks were, and encourage you to go find a tool that will help improve your /knowledge|code|workflow|productivity/. 

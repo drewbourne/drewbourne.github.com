@@ -5,42 +5,42 @@ title: Feathers and Weights
 
 Taking the feathers and weights from "plucking chickens":/2009/02/13/plucking-chickens.html its time to add them up. Lets take a look at how to convert a for-loop to a reusable functional solution.
 
-<pre><code>
+{% highlight as3 %}
 var feathersPerChicken:Array = pluck(chickens, "feathers"); // Array of Numbers
 var weightsPerChicken:Array = pluck(chickens, "weight"); // Array of Numbers
-</code></pre>
+{% endhighlight %}
 
 The basic for-loop to add up the number of feathers looks like this: 
 
-<pre><code>
+{% highlight as3 %}
 var totalFeathers:Number = 0;
 for (var i:int = 0, n:int = feathersPerChicken.length; i < n; i++) {
   totalFeathers += feathersPerChicken[i];
 }
-</code></pre>
+{% endhighlight %}
 
 As this loop iterates over every item in the Array we can simply replace it with a @Array.forEach@
 
-<pre><code>
+{% highlight as3 %}
 var totalFeathers:Number = 0;
 feathersPerChicken.forEach(function(numberOfFeathers:Number, i:int, a:Array) {
   totalFeathers += numberOfFeathers;
 });
-</code></pre>
+{% endhighlight %}
 
 Instead of manually managing the iterator index @i@ and length @n@, @Array.forEach@ does that work. However in its place we have to declare an anonymous function to close over the scope of @totalFeathers@ and add to that variable the @numberOfFeathers@. There is still a lot of boilerplate code in that block that could be removed or hidden as it is not helping us understand what the code is doing. 
 
 For the next steps lets replace the @for@ loop and @Array.forEach@ with a function call for what the intention of the code is: adding up a bunch of numbers, or rather getting the @sum@.
 
-<pre><code>
+{% highlight as3 %}
 var totalFeathers:Number = sum(feathersPerChicken);
-</code></pre>
+{% endhighlight %}
 
 Now that is much clearer. 
 
 Implementing @sum@ could be as simple as wrapping up the previous example into a sum function. It could then be used to add up the weights of the chickens too. 
 
-<pre><code>
+{% highlight as3 %}
 function sum(numbers:Array):Number {
   var total:Number = 0;
   numbers.forEach(function(number:Number, i:int, a:Array):void {
@@ -50,7 +50,7 @@ function sum(numbers:Array):Number {
 
 var totalFeathers:Number = sum(feathersPerChicken);
 var totalWeight:Number = sum(weightPerChicken);
-</code></pre>
+{% endhighlight %}
 
 By replacing the @for@ loops from the original example the code is now much easier to read, and tells exactly what its doing. A couple of more subtle gains from this are the scope is kept clean of temporary variables, and there is now a hook to change how the total is calculated without affecting the signature of the @sum@ function.
 

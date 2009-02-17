@@ -50,7 +50,7 @@ a:active {
   text-decoration: none;
 }
 
-p, pre, blockquote {
+p, pre, blockquote, ul {
   margin-bottom: 1em;
 }
 
@@ -98,4 +98,17 @@ footer {
 #related-posts {
   border-top: 1px solid #333;
   padding-top: 1em;
+}
+
+blockquote {
+  padding: 0 3em 0 2em;
+  font-style: italic;
+}
+
+blockquote code {
+  font-style: normal;
+}
+
+article ul {
+  list-style: square inside;
 }

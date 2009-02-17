@@ -54,6 +54,11 @@ p, pre, blockquote, ul {
   margin-bottom: 1em;
 }
 
+hr {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
 h1 {
   font-weight: normal;
   font-size: 295.5%;

@@ -1,0 +1,57 @@
+---
+layout: post
+title: Constructors &amp; apply
+---
+
+"asx":http://github.com/drewbourne/asx/tree/master has gained a new feature: @newInstance(klass:Class, parameters:Array)@. 
+
+It does exactly what it looks like - creates a new instance of a class passing in the given parameters to the constructor. 
+
+{% highlight as3 %}
+var event:Event = newInstance(Event, ["click", true, false]);
+{% endhighlight %}
+
+Perhaps not so useful for @Event@, however when "dependency injection":http://en.wikipedia.org/wiki/Dependency_injection starts calling it becomes an issue to support injecting values in constructors. 
+
+ActionScript 3 has changed enough from AS2 that its no longer possible to treat constructors as functions and call @apply()@ on them with our required parameters. (This example might be a little bit off as I haven't written AS2 for years, @apply@ might have to be called on the @prototype@).
+
+{% highlight as3 %}
+var event = Event.apply(null, ["click", true, false]);
+{% endhighlight %}
+
+Instead of a nice terse one-liner to invoke a constructor with an array of parameters AS3 requires us to do this hideous business: 
+
+{% highlight as3 %}
+public function newInstance(klass:Class, args:Array=null):Object {
+  args = args || [];
+  switch (args.length) {
+    case 0: { return new klass(); }
+    case 1: { return new klass(args[0]); }
+    case 2: { return new klass(args[0], args[1]); }
+    case 3: { return new klass(args[0], args[1], args[2]); }
+    // ... ad infinitum for as many arguments as you want to support
+  }
+}
+{% endhighlight %}
+
+bq. And I would like to share *_why_*. 
+
+AS3 gets compiled by @mxmlc@ into "bytecode":http://en.wikipedia.org/wiki/Bytecode. Bytecode is a way to represent the operations of code in a small and efficient to execute manner. The bytecode operation that constructs a new instance is called @construct@.
+
+This bytecode expects the next value in the bytecode to be the number of parameters to pass to the constructor. These parameters must already exist on the stack (see @http://en.wikipedia.org/wiki/Stack_(data_structure)@). Items on the stack are references to Arrays, Booleans, Numbers, Class instances etc. 
+
+It is *not* possible for the bytecode for @construct@ to say: 
+
+bq. _"use the (number of) items in the array at the top of the stack as my parameters"._
+
+And so unless a new bytecode operation is added to the AVM2 we must continue to use code similar to the epic @switch@ statement given above. 
+
+---
+
+@newInstance()@ is available in "asx":http://github.com/drewbourne/asx/tree/master and is taken from my work on implementing dependency injection containers, and an AS3 bytecode generator. Similar solutions exist in "Prana/Spring ActionScript":http://www.pranaframework.org/ and other DI frameworks. 
+
+"Flash Player VM / AVM2 Specifications PDF":www.adobe.com/devnet/actionscript/articles/avm2overview.pdf
+
+
+
+

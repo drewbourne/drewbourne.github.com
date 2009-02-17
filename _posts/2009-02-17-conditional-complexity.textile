@@ -1,6 +1,6 @@
 ---
 layout: post
-title: conditional complexity
+title: Conditional Complexity
 ---
 
 In starting a new project recently it occurred to me today to enable some of "Checkstyle":http://checkstyle.sourceforge.net/ configuration options that had previously been too noisy on legacy projects. This will hopefully help me and the other developers keep the Java code of this project clean, and free of common bad practices.
